@@ -364,6 +364,8 @@ function show_login_form(){
 									</button>
 									<b>or</b>
 									<a href="registration.php">create new account</a>
+									<div class='col-sm-12'><a href="forgot.php">forgot password?</a></div>
+									
 									<div id="validateBox"></div>
 								</form>
 							</div>
@@ -371,4 +373,105 @@ function show_login_form(){
 						</div>
 						<?php } 
 }
+
+
+function forgot_password(){
+	global $connection;
+/* this function is used to insert the password in temprory verifiction tabel 
+and it will send the email to the entered email*/
+	if(isset($_POST['recover_submit'])){
+		$email = $_POST['email'];
+		$password = $_POST['password'];
+		$password = mysqli_real_escape_string($connection,$password);
+          if(strlen($password) < 5 || empty($email)){
+               echo "<h4 class = 'alert alert-warning'>Fields cannot be lesser than 5 characters </h4>";  
+        }else{
+		$hash = password_hash($password,PASSWORD_DEFAULT ,["cost"=>9]);
+		$verification_status = 1;
+		$query_email_stmt = mysqli_prepare($connection,"SELECT user_email FROM users WHERE user_email = ?");
+		mysqli_stmt_bind_param($query_email_stmt,"s",$email);
+		mysqli_stmt_execute($query_email_stmt);
+		mysqli_stmt_store_result($query_email_stmt);
+		/* checking if user is availabel are not*/
+		if(mysqli_stmt_num_rows($query_email_stmt) == 1){
+
+		$query_upload_password = mysqli_prepare($connection,"INSERT INTO verify_password(email_address,password,status) VALUES(?,?,?)");
+		mysqli_stmt_bind_param($query_upload_password,"ssi",$email,$hash,$verification_status);
+		mysqli_stmt_execute($query_upload_password);
+		mysqli_stmt_close($query_upload_password);
+
+		$headers  = 'MIME-Version: 1.0' . "\r\n";
+		$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+		 
+		// Create email headers
+		$headers .= "From: janaravi1000@gmail.com \r\n".
+			'Reply-To: '.$email."\r\n" ;
+		$to = $email;
+		$subject = "change your email password";
+		$email_message = "<html>
+		<style>
+		.header{
+			color: #7c10e9;
+		}
+		.header .name{
+			color: yellow;
+		}
+		.footer{
+			color: rgb(238, 119, 119);
+		}
+		</style>
+		<body>
+			<h4 class='header'>hello <span class='name'>".$email."</span> </h4>
+			<p>This email is from janaravi.com/cms(programmingspot) </p>
+			<p> Please change your password by clicking the link below</p>
+			<a href='http://www.janaravi.com/cms/verification.php?cp=true&email=".$email."' target='_blank'>click here change password</a>
+			<h5 class='footer'>if you didn't want to change password ,ignore this message</h5>
+		</body></html>";
+
+		mail($to,$subject,$email_message,$headers);
+         echo "<h4 class='alert alert-success'>We have sent you email to confirm this action</h4>";
+		}else{
+			echo "<h4 class='alert alert-warning'>Your email address is not available</h4>";
+		}
+     mysqli_stmt_close($query_email_stmt);
+	}
+}
+}
+
+function change_forgot_password()
+{
+
+	/* after the user has cliked the link this function verify and update the existing password*/
+
+	global $connection;
+	if(isset($_GET['cp']) && isset($_GET['email'])){
+		$email = $_GET['email'];
+		$email = mysqli_real_escape_string($connection,$email);
+		$query_user = "SELECT user_email FROM users WHERE user_email = '$email'";
+		$querying_user = mysqli_query($connection,$query_user);
+		$user = mysqli_fetch_assoc($querying_user);
+		$user = $user['user_email'];
+
+/* geting the password from  verify password table*/
+
+		$get_new_password = "SELECT password FROM verify_password WHERE email_address = '$user'";
+		$querying_new_password = mysqli_query($connection,$get_new_password);
+		$new_password = mysqli_fetch_assoc($querying_new_password);
+		$new_password = $new_password['password'];
+		if($new_password){
+		$query_update_password = "UPDATE users SET password = '$new_password' WHERE user_email ='$user'";
+		$querying_update_password = mysqli_query($connection,$query_update_password);
+        if($querying_update_password){
+			echo "<h4 class='alert alert-success text-center'>Your password has been changed</h4>";
+			$delete_record_in_verify_table = "DELETE FROM verify_password WHERE email_address = '$user'";
+			$query_delete = mysqli_query($connection,$delete_record_in_verify_table);
+		}else{
+			echo "<h4 class='alert alert-success text-center'>Cannot change your password</h4>";
+		}
+	}else{
+		echo "<h4 class='alert alert-success text-center'>Unauthorised entry</h4>";
+	}
+	}
+}
+
 ?>

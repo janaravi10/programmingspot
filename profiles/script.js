@@ -239,3 +239,9 @@ function messageFun(){
   }
 }
 messageFun();
+function deleteAccountFun(){
+  if(confirm("Are you sure! you want to delete the account")){
+    return true;
+  }
+    return false;
+}

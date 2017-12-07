@@ -52,7 +52,7 @@
                         <a href="posts.php?source=post_comment"><i class="fa fa-fw fa-file"></i> Comments</a>
                     </li>
                     <li>
-                      <a href="message.php"><i class="fa fa-fw fa-envelope"></i>message  <span class="badge">0</span></a>
+                      <a href="message.php"><i class="fa fa-fw fa-envelope"></i>message  <span class="badge"><?php echo indicate_messages(); ?></span></a>
                   </li>
                     <li>
                         <a href="profile.php"><i class="fa fa-fw fa-dashboard"></i>profile</a>

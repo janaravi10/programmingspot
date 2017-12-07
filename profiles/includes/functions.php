@@ -227,7 +227,6 @@ function upload_profile_img(){
 
 
 
-
 function send_message()
 {
 	global $connection;
@@ -236,14 +235,15 @@ function send_message()
 		 $receiver_id = $_POST['receiver_id'];
 		 $receiver_id = mysqli_real_escape_string($connection,$receiver_id);
 		 $message_content = $_POST['message_content'];
+		 $flag = 1;
     if(!empty($message_content)){
 			$query_receiver_check = "SELECT user_id FROM users WHERE user_id = $receiver_id";
 			$querying_receiver_check = mysqli_query($connection,$query_receiver_check);
 			$check_receiver = mysqli_num_rows($querying_receiver_check);
 			if($check_receiver !== 0){
-			$stmt = "INSERT INTO message(sender_id,receiver_id,message) VALUES(?,?,?)";
+			$stmt = "INSERT INTO message(sender_id,receiver_id,message,flag) VALUES(?,?,?,?)";
 			$query_message_stmt = mysqli_prepare($connection,$stmt);
-			mysqli_stmt_bind_param($query_message_stmt,"iis",$sender_id,$receiver_id,$message_content);
+			mysqli_stmt_bind_param($query_message_stmt,"iisi",$sender_id,$receiver_id,$message_content,$flag);
 			mysqli_stmt_execute($query_message_stmt);
 			mysqli_stmt_error($query_message_stmt);
 			mysqli_stmt_close($query_message_stmt);
@@ -260,8 +260,6 @@ function send_message()
 }
 send_message();
 
-
-
 function show_message()
 {
 	global $row_image;
@@ -269,6 +267,8 @@ function show_message()
 	 if((isset($_GET['receiver_id']) && isset($_SESSION['user_id']))){
 		 $sender_id = $_SESSION['user_id'];
 		 $receiver_id = $_GET['receiver_id'];
+
+		
 	 $query_show_message = "SELECT * FROM message  WHERE (sender_id = $sender_id AND receiver_id = $receiver_id) ";
 	 $query_show_message .= "OR (sender_id = $receiver_id AND receiver_id = $sender_id)";
 
@@ -303,6 +303,7 @@ if (!$querying_show_message) {
  }
 }
 
+
 function show_messaged_user()
 {
 	if(isset($_SESSION['user_id'])){
@@ -321,13 +322,48 @@ function show_messaged_user()
 		$query_user_image = "SELECT profileimage FROM profileimage WHERE userid = '{$row['user_id']}'";
 		$querying_user_image = mysqli_query($connection,$query_user_image);
 		$row_user_image = mysqli_fetch_assoc($querying_user_image);
+		if(indicate_messages()){
    echo ' <div class="chat messaged">
 	 <img src="../img/'.$row_user_image['profileimage'].'" class="user-photo" alt=""">
 <a href="message.php?receiver_id='.$row['user_id'].'" class="messagedUserLink">
-	 <div class="chat-message ">'.$row['username'].'</div></a>
+	 <div class="chat-message ">'.$row['username'] .'<span class="indicate">'.indicate_messages().'</span></div></a>
 	 </div>';
+	}else{
+		echo ' <div class="chat messaged">
+		<img src="../img/'.$row_user_image['profileimage'].'" class="user-photo" alt=""">
+ <a href="message.php?receiver_id='.$row['user_id'].'" class="messagedUserLink">
+		<div class="chat-message ">'.$row['username'].'</div></a>
+		</div>';
 	}
+}
 
 }
 }
+
+function indicate_messages()
+{
+	
+	global $connection;
+	$user_id = $_SESSION['user_id'];
+	$query_indicate_message = "SELECT sender_id FROM message WHERE flag = 1 AND receiver_id = $user_id";
+	$querying_indicate_message = mysqli_query($connection,$query_indicate_message);
+	$count = mysqli_num_rows($querying_indicate_message);
+	if($count){
+	return $count;
+	}
+}
+function update_message_indication()
+{
+	if(isset($_GET['receiver_id'])){
+	$sender_id = $_SESSION['user_id'];
+	$receiver_id = $_GET['receiver_id'];
+global $connection;
+$query_indicate_message_null = "UPDATE message SET flag = 0 WHERE receiver_id = $sender_id AND sender_id = $receiver_id";
+$querying_indicate_message_null = mysqli_query($connection,$query_indicate_message_null);
+if (!$querying_indicate_message_null) {
+   die(mysqli_error($connection));
+}
+	}
+}
+
 ?>

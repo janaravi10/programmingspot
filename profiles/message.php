@@ -25,7 +25,10 @@ if(isset($_GET['receiver_id'])){
   <script>const receiverId = 0;</script>
   <?php
 }
+/*update the message seen status*/
+update_message_indication();
  ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

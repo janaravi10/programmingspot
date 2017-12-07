@@ -52,3 +52,12 @@
 #message .self {
   justify-content: flex-end;
 }
+.indicate {
+    background: white;
+    color: black;
+    padding: 4px;
+    border-radius: 100%;
+}
+.messaged a{
+    text-decoration: none !important;
+}

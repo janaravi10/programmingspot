@@ -48,7 +48,19 @@
     font-size: 18px;
     color: #fff81e;
     width: 80%;
+   
 }
 #message .self {
   justify-content: flex-end;
+
+}
+.indicate {
+    display: inline-block;
+    background: white;
+    color: black;
+    padding: 4px;
+    border-radius: 100%;
+}
+.messaged a{
+    text-decoration: none !important;
 }

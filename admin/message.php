@@ -25,6 +25,8 @@ if(isset($_GET['receiver_id'])){
   <script>const receiverId = 0;</script>
   <?php
 }
+/*update the message seen status*/
+update_message_indication();
  ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -146,8 +148,15 @@ if (isset($receiver_id)) {
 
         <script src="js/bootstrap.min.js"></script>
     <script  src="script.js"></script>
+    <script type="text/javascript">
 
-
+        function deleteAccountFun(){
+        	if(confirm("Are you sure! you want to delete the account")){
+        		return true;
+        	}
+            return false;
+        }
+    </script>
     </body>
 
     </html>

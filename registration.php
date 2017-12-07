@@ -33,13 +33,13 @@
             $token = uniqid("",true);
            
         $hash = password_hash($password,PASSWORD_DEFAULT ,["cost"=>9]);
-        $check_username = "SELECT * FROM users WHERE username= '$username' || user_email = '$email'";
+        $check_username = "SELECT * FROM users WHERE username= '$username' OR user_email = '$email'";
         $check_username_querying = mysqli_query($connection,$check_username);
         if(!mysqli_num_rows($check_username_querying)){
             $query_register_user = "INSERT INTO  verfication(username,email,password,verification_status,token)";
             $query_register_user .= "VALUES('{$username}','{$email}','{$hash}',0,'$token')";
             $querying_register_user = mysqli_query($connection,$query_register_user);
-            $alert_message = "<h4 class='alert alert-success'>Registration succesful</h4>";
+            $alert_message = "<h4 class='alert alert-success'>Registration succesful verify email id</h4>";
             if (!$querying_register_user) {
                 die("qurey failed".mysqli_error($connection));
             }else{

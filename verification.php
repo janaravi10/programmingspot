@@ -6,7 +6,8 @@ include "includes/header.php";
 
  include "includes/navigation.php"; 
 
-
+    
+ change_forgot_password();
 
  if(isset($_GET['token']) && isset($_GET['email'])){
 

@@ -250,36 +250,10 @@ if (receiverId) {
 }
 messageFun();
 
+  function deleteAccountFun(){
+    if(confirm("Are you sure! you want to delete the account")){
+      return true;
+    }
+      return false;
+  }
 
-// (function (){
-//
-// var messagedUserLink = document.getElementsByClassName("messagedUserLink");
-// for (var i = 0; i < messagedUserLink.length; i++) {
-//   messagedUserLink[i].addEventListener("click",function (e){
-//     e.preventDefault();
-// var messagedUserLinkParam = getLinkParam("receiver_id",this);
-//     messagedUserFun(messagedUserLinkParam);
-//     return false;
-//   });
-// };
-//
-// function messagedUserFun(receiver_id) {
-//   var xhttp = new XMLHttpRequest();
-//   xhttp.onreadystatechange = function(){
-//     if(this.readyState == 4 && this.status == 200){
-//           var showMessages = document.getElementById("message");
-//           showMessages.innerHTML = this.responseText;
-//
-//        };
-//    };
-//
-//    xhttp.open("POST","includes/functions.php",true);
-//    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-//    xhttp.send("receiver_id="+receiver_id);
-//
-//
-// }
-//
-//
-//
-// })();

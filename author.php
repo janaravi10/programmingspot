@@ -49,6 +49,7 @@ include 'includes/database.php';
                         $row['user_lastname'] = "Not provided.";
                     }
                     }
+                    
                 $query_followers = "SELECT user_id FROM friends WHERE friend_id={$post_author_id}";
                 $querying_followers = mysqli_query($connection,$query_followers);
                 $count_followers  = mysqli_num_rows($querying_followers);
