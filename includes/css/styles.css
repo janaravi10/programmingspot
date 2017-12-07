@@ -1,0 +1,93 @@
+.pager li .pag {
+	background-color: #000 ;
+}
+.alertliking {
+		  animation-name: alertliking;
+		  animation-duration: 1s; 
+		  animation-fill-mode: forwards;
+		  padding: 5px;
+		  background: rgb(198, 165, 241);
+		  border-radius: 4px;
+}
+.red{
+	background-color: rgb(238, 119, 119);
+}
+.green{
+	background-color: #7c10e9;
+}
+.black{
+	color: rgba(44, 42, 46, 0.767);
+}
+.gray{
+	color: rgba(161, 161, 161, 0.76);
+}
+@keyframes alertliking {
+	0% {
+		opacity: 0;
+	}
+	100%{
+		opacity: 1;
+	}
+}
+
+.fadeOut {
+	animation-name: alertliking;
+	animation-duration: 1s;
+}
+@keyframes fadeout {
+	0% {
+		opacity: 1;
+	}
+	100%{
+		opacity: 0;
+	}
+}
+
+.spinner{
+	width: 50px;
+	height: 50px;
+	border-bottom: 2px solid rgb(93, 157, 230);
+	border-radius: 50%;
+	animation: spinner 1s infinite linear;
+	margin: 20px  auto;
+}
+.backspinner{
+	width: 40px;
+	height: 40px;
+	border-bottom: 2px solid rgb(147, 26, 228);
+	border-radius: 50%;
+	animation: spinner 1s infinite linear;
+	margin: auto;
+}
+.innerspinner{
+	width: 30px;
+	height: 30px;
+	border-bottom: 2px solid rgb(21, 230, 202);
+	border-radius: 50%;
+	animation: spinner 1s infinite linear;
+	margin: auto;
+}
+@keyframes backspinner{
+	from{
+		transform: rotate(0deg);
+	}
+	to{
+		transform: rotate(-360deg);
+	}
+}
+@keyframes innerspinner{
+	from{
+		transform: rotate(0deg);
+	}
+	to{
+		transform: rotate(-360deg);
+	}
+}
+@keyframes spinner{
+	from{
+		transform: rotate(0deg);
+	}
+	to{
+		transform: rotate(360deg);
+	}
+}
